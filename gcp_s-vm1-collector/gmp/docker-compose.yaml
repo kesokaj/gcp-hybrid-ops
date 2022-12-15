@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  gmp:
+    image: gke.gcr.io/prometheus-engine/prometheus:v2.28.1-gmp.4-gke.0
+    container_name: gmp
+    hostname: gmp
+    restart: unless-stopped
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./data:/prometheus/data
+      - ./config.yaml:/prometheus/config.yaml
+      - ./key.json:/gmp/key.json  
+    command:
+      - '--config.file=/prometheus/config.yaml'
+      - '--enable-feature=remote-write-receiver'   
+      - '--storage.tsdb.path=/prometheus/data'
+      - '--storage.tsdb.retention.time=24h'
+      - '--web.enable-lifecycle'
+      - '--storage.tsdb.no-lockfile'
+      - '--web.route-prefix=/'
+      - '--export.credentials-file=/gmp/key.json'   
+    ports:
+      - "9090:9090"

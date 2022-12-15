@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  snmp-exporter:
+    image: snmp-exporter:v1
+    container_name: snmp-exporter
+    hostname: snmp-exporter
+    network_mode: host
+    restart: unless-stopped
